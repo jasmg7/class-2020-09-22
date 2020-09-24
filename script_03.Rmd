@@ -51,6 +51,23 @@ sep_old <-
 
 **Prompt:** Read in and clean the new data, creating an object called `sep_new`. 
 
+```{r}
+sep_new <- read_excel("class_enrollment_summary_by_term_9-22-2020.xlsx", 
+             skip = 3) %>% 
+  clean_names() %>% 
+  filter(! is.na(course_title)) %>% 
+  select(-grad, -non_degree, -x_reg, -vus, -employee, 
+         -withdraw, -total, -instructor_full_name, -course_section_code) %>%
+  rename(id = course_id,
+         title = course_title,
+         name = course_name,
+         department = course_department) %>% 
+  filter(u_grad > 10)
+  
+sep_new %>%
+  group_by(title) %>%
+  summarise(u_grad_sum = sum(u_grad), .groups = "drop")
+```
 
 
 ### Scene 2
@@ -60,12 +77,14 @@ sep_old <-
 
 Before we start on the model, Wisdom suggests we should:
 
-
+# # Know exactly why we are investigating this model
+# # Is there somethign wrong with these classes that makes students want to drop them?
 
 
 After we have a model, Temperance suggests we should:
 
-
+# # Know that our data has limitations
+# # May not be reflective of the real reasons why students drop courses
 
 ### Scene 3
 
